@@ -58,10 +58,7 @@ class  Program
 		Console.WriteLine("From {0} and move {1} workdays you end up on {2}", start, move, result);
 	}
 }
-```
-To run the code standing in the workday folder
-
-> dotnet run --project ConsoleWorkdays/ConsoleWorkdays.csproj   
+``` 
 
 ## WorkdayCalendarLibTest
 Contains unit tests for WorkdayCalendarLib. To run the tests:
