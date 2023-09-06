@@ -5,26 +5,13 @@ namespace WorkdayCalendarLib
         public Month Month { get; private set; }
         public int Day { get; private set; }
 
-        public RecurringHoliday(Month month, int day, string name = ""): base(name) {           
-            switch(month) {
-                case Month.Februar:
-                    if(day < 1 || day > 29) {
-                        throw new ArgumentOutOfRangeException(nameof(day), "Day must be between 1 and 29 for Februar.");
-                    }
-                    break;
-                case Month.April: case Month.June: case Month.September: case Month.November:
-                    if(day < 1 || day > 30) {
-                        throw new ArgumentOutOfRangeException(nameof(day), 
-                            "Day must be between 1 and 30 for April, June, September and November.");
-                    }
-                    break;
-                default:
-                    if(day < 1 || day > 31) {
-                        throw new ArgumentOutOfRangeException(nameof(day), 
-                            "Day must be between 1 and 31 for Januar, March, May, July, August, October and December.");
-                    }
-                    break;
+        public RecurringHoliday(Month month, int day, string name = ""): base(name) 
+        {           
+            (bool ok, string errorMsg) = MonthAndDay.IsValid(month, day);
+            if(!ok) {
+                throw new ArgumentOutOfRangeException(nameof(day), errorMsg); 
             }
+
             Month = month;
             Day = day;
         }

@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace WorkdayCalendarLibTest
 {
     [TestClass]
@@ -19,14 +13,21 @@ namespace WorkdayCalendarLibTest
 
         [TestMethod]
         [DynamicData(nameof(TestDataGenerator), DynamicDataSourceType.Method)]
-        public void TestGetStart(DateTime input, DateTime expectedResult)
+        public void Test_GetStartMethod_WhenGivenDateTime_ShouldReturnCorrectDateTime(string inputDateTime, string expectedDateTime)
         {
-            Assert.AreEqual(expectedResult, _workDayCalendar.GetStart(input));
+            var input = DateTime.ParseExact(inputDateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            var expected = DateTime.ParseExact(expectedDateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+
+
+            Assert.AreEqual(expected, _workDayCalendar.GetStart(input));
         }
 
         public static IEnumerable<object[]> TestDataGenerator() {
-            yield return new object[] { new DateTime(2023,9,1,7,0,0), new DateTime(2023,9,1,8,0,0) };
-            yield return new object[] { new DateTime(2023,9,2,9,0,0), new DateTime(2023,9,4,8,0,0) };
+            yield return new object[] { "2023-09-01 07:00:00", "2023-09-01 08:00:00" };
+            yield return new object[] { "2023-09-02 09:00:00", "2023-09-04 08:00:00" };
+            yield return new object[] { "2023-02-28 18:00:00", "2023-03-01 08:00:00" };
+            yield return new object[] { "2024-02-28 18:00:00", "2024-02-29 08:00:00" };
+            yield return new object[] { "2024-12-31 18:00:00", "2025-01-01 08:00:00" };
         }
     }
 }

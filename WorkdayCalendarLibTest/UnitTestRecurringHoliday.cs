@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace WorkdayCalendarLibTest.TestResults
 {
     [TestClass]
@@ -11,7 +5,7 @@ namespace WorkdayCalendarLibTest.TestResults
     {
         [TestMethod]
         [DynamicData(nameof(TestDataGenerator), DynamicDataSourceType.Method)]
-        public void TestDates(Month month, int day, bool ok) 
+        public void Test_CreateRecurringHoliday_WhenGivenMonthDay_ShouldThrowExceptionWhenInvalidInput(Month month, int day, bool ok) 
         {
             try {
                 var rh = new RecurringHoliday(month, day);

@@ -1,6 +1,3 @@
-using System.Security.Cryptography;
-using Microsoft.VisualBasic;
-
 namespace WorkdayCalendarLib
 {
     public class WorkdayCalendar
@@ -34,25 +31,25 @@ namespace WorkdayCalendarLib
         }
 
         public DateTime AddWorkdays(DateTime dt, double workdays) {
-            var workTime = workdays * WorkingDayLength;     
-            var pos = GetStart(dt);     // Determine starting position, the start of next workday.
+            var workTime = workdays * WorkingDayLength;         // Calculate how much work time to move
+            var pos = GetStart(dt);                             // Determine starting position, the start of next workday.
             
             if(workdays < 0) {
-                return SubtractWorkdays(pos, -workTime);    // Same logic but reverse.
+                return SubtractWorkdays(pos, -workTime);        // Same logic as below but reverse.
             }
 
             for(;;) 
             {
                 var leftInDay = _workdayEnd - pos.TimeOfDay;    // Calc how much time left in current workday.
                 var toConsume = Min(leftInDay, workTime);       // Determine how much to consume in this workday.
-                pos += toConsume;           // Move position the amount consumed in this workday.                       
-                workTime -= toConsume;      // Calculate how much more time remains to consume.
+                pos += toConsume;                               // Move position the amount consumed in this workday.                       
+                workTime -= toConsume;                          // Calculate how much more time remains to consume.
                 
-                if(workTime <= TimeSpan.Zero) {     // Indicates we are done.
+                if(workTime <= TimeSpan.Zero) {                 // Indicates we are done.
                     break;
                 }
 
-                pos = NextWorkday(pos);     // Move to next workday, jumps weekends and holidays.
+                pos = NextWorkday(pos);                         // Move to next workday, jumps weekends and holidays.
             };
  
             return pos;
@@ -128,8 +125,5 @@ namespace WorkdayCalendarLib
         private bool IsWeekend(DateTime dt) => dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday;
 
         private bool IsHoliday(DateTime dt) => _holidays.Any(d => d.Match(dt));
-    }
-
-    
-        
+    }       
 }

@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace WorkdayCalendarLibTest
 {
     [TestClass]
@@ -19,21 +13,22 @@ namespace WorkdayCalendarLibTest
 
         [TestMethod]
         [DynamicData(nameof(TestDataGenerator), DynamicDataSourceType.Method)]
-        public void TestIsWorkingDay(DateTime dt, bool expectedResult)
+        public void Test_IsWorkingDay_WhenGivenDateTime_ShouldReturnIfWorkingDay(string inputDateTime, bool expectedResult)
         {
-            bool res = _workDayCalendar.IsWorkingDay(dt);
-            Assert.AreEqual(res, expectedResult);
+            var input = DateTime.ParseExact(inputDateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            bool res = _workDayCalendar.IsWorkingDay(input);
+            Assert.AreEqual(expectedResult, res);
         }
 
         public static IEnumerable<object[]> TestDataGenerator() {
-            yield return new object[] { new DateTime(2022,5,17), false };
-            yield return new object[] { new DateTime(2023,5,17), false };
-            yield return new object[] { new DateTime(2023,9,1), true };
-            yield return new object[] { new DateTime(2023,9,2), false };
-            yield return new object[] { new DateTime(2023,9,4), true };
-            yield return new object[] { new DateTime(2022,10,6), true };
-            yield return new object[] { new DateTime(2023,10,6), false };
-            yield return new object[] { new DateTime(2023,11,6), true };
+            yield return new object[] { "2022-05-17", false };
+            yield return new object[] { "2023-05-17", false };
+            yield return new object[] { "2023-09-01", true };
+            yield return new object[] { "2023-09-02", false };
+            yield return new object[] { "2023-09-04", true };
+            yield return new object[] { "2022-10-06", true };
+            yield return new object[] { "2023-10-06", false };
+            yield return new object[] { "2023-11-06", true };
         }
     }
 }

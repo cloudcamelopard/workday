@@ -19,17 +19,9 @@ namespace WorkdayCalendarLib
 
         // This might throw exception if any of the parts have an invalid value.
         public DateTime Build() {
-            if (_day < 1 || _day > 31) {
-                throw new Exception(string.Format("Day can not be {0} for any month.", _day));
-            }
-            if (_month == 2 && _day == 29 && !DateTime.IsLeapYear(_year)) {
-                throw new Exception(string.Format("Day can not be {0} for Februar for non leap year {1}.", _day, _year));
-            }
-            if (_month == 2 && _day > 29) {
-                throw new Exception(string.Format("Day can not be {0} for Februar", _day));
-            }
-            if ((_month == 4 || _month == 6 || _month == 9 || _month == 12) && _day == 31) {
-                throw new Exception(string.Format("Day can not be {0} for April, June, September or November.", _day));
+            (bool ok, string errorMsg) = MonthAndDay.IsValid(_year, _month, _day);
+            if(!ok) {
+                throw new Exception(errorMsg);
             }
             
             return new DateTime(_year, _month, _day, _hour, _minute, _second); 

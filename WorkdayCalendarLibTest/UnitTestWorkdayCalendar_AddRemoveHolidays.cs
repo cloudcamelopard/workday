@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace WorkdayCalendarLibTest
 {
     [TestClass]
@@ -22,7 +15,7 @@ namespace WorkdayCalendarLibTest
 
         [TestMethod]
         [DynamicData("SingleHolidayGenerator", DynamicDataSourceType.Method)]
-        public void AddSingleHoliday(int year, Month month, int day)
+        public void Test_AddHolidays_WhenGivenSingleHoliday_ShouldThatDayNotBeWorkingday(int year, Month month, int day)
         {
             _workDayCalendar.AddHolidays(new SingleHoliday(year, month, day));
             Assert.IsFalse(_workDayCalendar.IsWorkingDay(new DateTime(year,(int)month,day)));
@@ -30,14 +23,14 @@ namespace WorkdayCalendarLibTest
 
         [TestMethod]
         [DynamicData("RecurringHolidayGenerator", DynamicDataSourceType.Method)]
-        public void AddRecurringHoliday(Month month, int day)
+        public void Test_AddHolidays_WhenGivenSingleHoliday_ShouldThatDayNotBeWorkingday(Month month, int day)
         {
             _workDayCalendar.AddHolidays(new RecurringHoliday(month, day));
             Assert.IsFalse(_workDayCalendar.IsWorkingDay(new DateTime(2000,(int)month,day)));
         }
 
         [TestMethod]
-        public void RemoveSingleHoliday()
+        public void Test_RemoveSingleHoliday_ShouldThatDayAgainBeWorkingday()
         {
             Assert.IsFalse(_workDayCalendar.IsWorkingDay(new DateTime(2004,5,27)));
             _workDayCalendar.RemoveSingleHoliday(2004, Month.May, 27);
@@ -45,7 +38,7 @@ namespace WorkdayCalendarLibTest
         }
 
         [TestMethod]
-        public void RemoveRecurringHoliday()
+        public void Test_RemoveRecurringHoliday_ShouldThatDayAgainBeWorkingday()
         {
             Assert.IsFalse(_workDayCalendar.IsWorkingDay(new DateTime(2000,5,17)));
             _workDayCalendar.RemoveRecurringHoliday(Month.May, 17);

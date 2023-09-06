@@ -5,7 +5,7 @@ namespace WorkdayCalendarLibTest
     {
         [TestMethod]
         [DynamicData(nameof(TestDataGenerator), DynamicDataSourceType.Method)]
-        public void TestTimes(int hour, int minute, bool ok) 
+        public void Test_CreateTimeOfDay_WhenGivenHourMinute_ShouldThrowExceptionWhenInvalidInput(int hour, int minute, bool ok) 
         {
             try {
                 var hm = new TimeOfDay(hour, minute);

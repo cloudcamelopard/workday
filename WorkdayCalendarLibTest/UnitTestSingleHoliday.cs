@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace WorkdayCalendarLibTest
 {
     [TestClass]
@@ -11,7 +5,7 @@ namespace WorkdayCalendarLibTest
     {
         [TestMethod]
         [DynamicData(nameof(TestDataGenerator), DynamicDataSourceType.Method)]
-        public void TestDates(int year, Month month, int day, bool ok) 
+        public void Test_CreateSingleHoliday_WhenGivenYearMonthDay_ShouldThrowExceptionWhenInvalidInput(int year, Month month, int day, bool ok) 
         {
             try {
                 var rh = new SingleHoliday(year, month, day);

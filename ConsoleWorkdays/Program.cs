@@ -1,33 +1,50 @@
 ﻿using System;
-namespace ConsoleWorkdays
+using System.Globalization;
+using WorkdayCalendarLib;
+
+class Program
 {
-    using WorkdayCalendarLib;
-
-    class Program 
+    static void Main()
     {
-        static void Main() {
+        // Create the calendar, set up workday and holidays.
+        var calendar = new WorkdayCalendar() {
+            WorkdayStart = 8,
+            WorkdayEnd = 16,
+        }.AddHolidays(new RecurringHoliday(Month.May, 17), new SingleHoliday(2004, Month.May, 27));
 
-            var wdc = new WorkdayCalendar
+        while (true)
+        {
+            Console.Write("Enter a date and days (YYYY-MM-dd HH:mm:ss d) or 'q' to quit: ");
+            string input = Console.ReadLine() ?? "";
+
+            if (input.ToLower() == "q")
             {
-                WorkdayStart = new TimeOfDay(8, 0),
-                WorkdayEnd = new TimeOfDay(16, 0)
+                break; // To terminate
             }
-            .AddHolidays(new RecurringHoliday(Month.May, 17), new SingleHoliday(2004, Month.May, 27));
-            
-            DateTime start = new DateTime(2004, 5, 24, 18, 5, 0);
-            DateTimeBuilder builder = new DateTimeBuilder(start);
-            
-            var res = wdc.AddWorkdays(builder.Build(), -5.5);
-            Console.WriteLine(res);
-            res = wdc.AddWorkdays(builder.Hour(19).Minute(3).Build(), 44.723656);
-            Console.WriteLine(res);
-            res = wdc.AddWorkdays(builder.Hour(18).Build(), -6.7470217);
-            Console.WriteLine(res);
-            res = wdc.AddWorkdays(builder.Hour(8).Build(), 12.782709);
-            Console.WriteLine(res);
-            res = wdc.AddWorkdays(builder.Hour(7).Build(), 8.276628);
-            Console.WriteLine(res);
+
+            string[] parts = input.Split(' ');
+
+            if (parts.Length == 3)
+            {
+                var startTimeInput = string.Concat(parts[0], " ", parts[1]); // Space between YYYY-MM-dd and HH:mm:ss
+                var daysToAddInput = parts[2];
+
+                if(double.TryParse(daysToAddInput, NumberStyles.Float, CultureInfo.InvariantCulture, out double daysToAdd) &&
+                    DateTime.TryParseExact(startTimeInput, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, 
+                        DateTimeStyles.None, out DateTime startTime))
+                
+                {
+                    var result = calendar.AddWorkdays(startTime, daysToAdd);
+                    Console.WriteLine("Resulting date and time: {0}", result);
+                }
+            }   
+            else
+            {
+                Console.WriteLine("Invalid input format. Please use 'YYYY-MM-dd HH:mm:ss days'.");
+            }
         }
+
+        Console.WriteLine("Program terminated.");        
     }
     
 }

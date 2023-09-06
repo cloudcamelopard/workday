@@ -23,6 +23,7 @@ namespace WorkdayCalendarLibTest
             Assert.AreEqual(expected, DropMilliseconds(_workDayCalendar.AddWorkdays(start, workdays)));
         }
 
+        // Helper method to simplify comparison
         static DateTime DropMilliseconds(DateTime dateTime)
         {
             return new DateTime(dateTime.Ticks - (dateTime.Ticks % TimeSpan.TicksPerSecond), dateTime.Kind);
