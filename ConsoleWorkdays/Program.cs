@@ -6,7 +6,6 @@ class Program
 {
     static void Main()
     {
-        // Create the calendar, set up workday and holidays.
         var calendar = new WorkdayCalendar() {
             WorkdayStart = 8,
             WorkdayEnd = 16,
@@ -34,17 +33,23 @@ class Program
                         DateTimeStyles.None, out DateTime startTime))
                 
                 {
-                    var result = calendar.AddWorkdays(startTime, daysToAdd);
-                    Console.WriteLine("Resulting date and time: {0}", result);
+                    try 
+                    {
+                        var result = calendar.AddWorkdays(startTime, daysToAdd);
+                        Console.WriteLine("Resulting date and time: {0}", result);
+                        
+                    } 
+                    catch(Exception e) 
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    continue;
                 }
             }   
-            else
-            {
-                Console.WriteLine("Invalid input format. Please use 'YYYY-MM-dd HH:mm:ss days'.");
-            }
+            
+            Console.WriteLine("Invalid input format. Please use 'YYYY-MM-dd HH:mm:ss days'.");
         }
 
         Console.WriteLine("Program terminated.");        
-    }
-    
+    }   
 }
