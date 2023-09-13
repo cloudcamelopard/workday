@@ -15,12 +15,26 @@ namespace WorkdayCalendarLibTest
 
         [TestMethod]
         [DynamicData(nameof(TestDataGenerator), DynamicDataSourceType.Method)]
-        public void TestNextWorkday(string startDateTime, double workdays, string expectedDateTime)
+        public void Test_AddWorkdays_ForValidResult_ShouldGiveCorrectDateTime(string startDateTime, double workdays, string expectedDateTime)
         {
             var start = DateTime.ParseExact(startDateTime, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
             var expected = DateTime.ParseExact(expectedDateTime, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
             Assert.AreEqual(expected, DropMilliseconds(_workDayCalendar.AddWorkdays(start, workdays)));
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(OutOfBoundsDataGenerator), DynamicDataSourceType.Method)]
+        public void Test_AddWorkdays_ResultingInOutOfBound_ShouldThrowException(string startDateTime, double workdays) 
+        {
+            var start = DateTime.ParseExact(startDateTime, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            try {
+               _workDayCalendar.AddWorkdays(start, workdays);
+            }
+            catch(ArgumentOutOfRangeException) {
+                return;
+            }
+            Assert.Fail("ArgumentOutOfRangeException should be thrown for out of bound date");
         }
 
         // Helper method to simplify comparison
@@ -60,5 +74,10 @@ namespace WorkdayCalendarLibTest
             yield return new object[] { "2004-05-24 07:03:00",  8 + 2.0/8 + 12.0/(60*8), "2004-06-04 10:12:00" };
             yield return new object[] { "2004-05-24 07:03:00",  8.275, "2004-06-04 10:12:00" };
         }    
+    
+        public static IEnumerable<object[]> OutOfBoundsDataGenerator() {
+            yield return new object[] { "0001-01-01 00:00:01", -1 };
+            yield return new object[] { "9999-12-31 23:59:59", -1 };
+        }
     }
 }
